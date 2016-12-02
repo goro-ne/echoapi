@@ -1,0 +1,49 @@
+hash: 0924be4a9937c0cf69d2a358fffb36c2016c03ef60d4a03da22456fdc4332367
+updated: 2016-12-02T00:40:50.484498024Z
+imports:
+- name: github.com/labstack/echo
+  version: cd2530ea098106338b888f4fb66e966efa2fd75e
+- name: github.com/labstack/gommon
+  version: 9a43ff0d261e0e65594422e9eee08cf301aabbe7
+  subpackages:
+  - color
+  - log
+- name: github.com/mattn/go-colorable
+  version: d228849504861217f796da67fae4f6e347643f15
+- name: github.com/mattn/go-isatty
+  version: 30a891c33c7cde7b02a981314b4228ec99380cca
+- name: github.com/miekg/dns
+  version: 271c58e0c14f552178ea321a545ff9af38930f39
+- name: github.com/rsc/letsencrypt
+  version: 76104d26167d38b6a0010f42bfc8ec5487742e8b
+- name: github.com/tylerb/graceful
+  version: 4df1190835320af7076dfcf27b3d071fd3612caf
+- name: github.com/valyala/fasttemplate
+  version: 3b874956e03f1636d171bda64b130f9135f42cff
+- name: github.com/xenolf/lego
+  version: cc94601612b43c3cf862a5ae5e2ec66fa5e64c89
+  subpackages:
+  - acme
+- name: golang.org/x/crypto
+  version: 7efbae5d109cb7a2dbc362886213f73c4c55dede
+  subpackages:
+  - ocsp
+- name: golang.org/x/net
+  version: 97edce0b2e423f6a8debb459af47f4a3cb4ff954
+  subpackages:
+  - context
+  - publicsuffix
+- name: golang.org/x/sys
+  version: d5645953809d8b4752afb2c3224b1f1ad73dfa70
+  subpackages:
+  - unix
+- name: golang.org/x/time
+  version: f51c12702a4d776e4c1fa9b0fabab841babae631
+  subpackages:
+  - rate
+- name: gopkg.in/square/go-jose.v1
+  version: aa2e30fdd1fe9dd3394119af66451ae790d50e0d
+  subpackages:
+  - cipher
+  - json
+testImports: []
