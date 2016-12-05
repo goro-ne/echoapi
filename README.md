@@ -11,11 +11,104 @@ GO言語のechoフレームワークを遣い、シンプルなREST APIを実装
 
 ```
 Amazon Linux AMI
-t2.micro
-1 コア vCPU (最大 3.3 GHz)、1 GiB メモリ RAM、8 GB ストレージ
+t2.micro - $0 / 月750時間
+1 コア vCPU, 1 GiB メモリ RAM, 8 GB ストレージ
 
-RDS MySQL
+RDS for MySQL 5.6.34 (Auroraに移行した場合は MySQL 5.6.10aと互換性あり)
+db.t2.micro - $0 / 月750時間
+1 コア vCPU, 1 GiB メモリ, 10 GB ストレージ, シングルAZ
+DBユーザー: 任意
+データベースのポート: 3306
 ```
+
+
+## RDS for MySQLの設定
+
+```
+1. RDSのセキュリティグループの作成
+  - インバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信元:EC2のセキュリティグループID: sg-xxxxxxxを指定する。
+  - アウトバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信元:EC2のセキュリティグループID: sg-xxxxxxxを指定する。
+2. ECのセキュリティグループを追加 (RDSに接続するインスタンス)
+  - インバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信先:RDSのセキュリティグループID: sg-xxxxxxxを指定する。
+  - アウトバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信先:RDSのセキュリティグループID: sg-xxxxxxxを指定する。
+3. RDSのパラメータグループを作成 (文字エンコードをlatin1からutf8にして日本語対応)
+  - RDSダッシュボードのパラメータグループを選択する。
+  - パラメータグループ作成をクリック。
+  - パラメータグループファミリー:「mysql5.6」、グループ名:「utf8」、説明:「UTF8」
+  - 「utf8」を選択し、パラメータの編集をクリック。
+  - character_set_client、character_set_connection、character_set_database、character_set_results、character_set_serverを「utf8」に設定する。
+  - skip-character-set-client-handshakeを「1」に設定し、変更の保存する。
+4. RDSのインスタンスを作成
+  - RDS for MySQL 5.6.34
+  - パラメータグループ: utf8
+  - DB名、ユーザー名、パスワード: 任意
+```
+
+## MySQLクライアントのインストール
+
+```bash
+$ sudo -i
+# rpm -ihv http://downloads.mysql.com/archives/get/file/MySQL-client-5.6.33-1.el7.x86_64.rpm
+# yum search mysql 56
+mysql56.x86_64 : MySQL client programs and shared libraries
+     :
+# yum install mysql56.x86_64
+```
+
+## MySQL RDSへの接続、テストテーブル作成
+
+```bash
+$ mysql -h エンドポイント -P ポート -u ユーザ名 -p DB名
+Enter password: 設定したユーザのパスワード
+
+mysql> show variables like 'char%';
++--------------------------+-------------------------------------------+
+| Variable_name            | Value                                     |
++--------------------------+-------------------------------------------+
+| character_set_client     | utf8                                      |
+| character_set_connection | utf8                                      |
+| character_set_database   | utf8                                      |
+| character_set_filesystem | binary                                    |
+| character_set_results    | utf8                                      |
+| character_set_server     | utf8                                      |
+| character_set_system     | utf8                                      |
+| character_sets_dir       | /rdsdbbin/mysql-5.6.34.R1/share/charsets/ |
++--------------------------+-------------------------------------------+
+8 rows in set (0.00 sec)
+
+
+mysql>
+create table test.userinfo(
+  id int not null auto_increment,
+  email varchar(50),
+  first_name varchar(50),
+  last_name varchar(50),
+  primary key(id)
+);
+
+mysql> desc test.userinfo;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id         | int(11)     | NO   | PRI | NULL    | auto_increment |
+| email      | varchar(50) | YES  |     | NULL    |                |
+| first_name | varchar(50) | YES  |     | NULL    |                |
+| last_name  | varchar(50) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into test.userinfo(email,first_name,last_name) values ('musashi-miyamoto@gmail.com','武蔵','宮本');
+
+mysql> select * from test.userinfo;
++----+----------------------------+------------+-----------+
+| id | email                      | first_name | last_name |
++----+----------------------------+------------+-----------+
+|  1 | musashi-miyamoto@gmail.com | 武蔵       | 宮本      |
++----+----------------------------+------------+-----------+
+1 rows in set (0.00 sec)
+
+```
+
 
 ## Go1.6の設定
 
@@ -66,6 +159,7 @@ $ cd echoapi
 
 ```bash
 $ glide install
+(2回目以降は glide update)
 ```
 
 ## echoサーバー起動
@@ -77,7 +171,54 @@ $ go run server.go
 
 ## サーバーアクセス
 
+公開IPアドレス: EC2のセキュリティグループのインバウンドタブで、ポート:1234を追加
+
+### GETリクエスト
+
 ```bash
-$ curl http://localhost:1234
+$ curl http://公開IPアドレス:1234/user/1
+
+{"id":1,"email":"musashi-miyamoto@gmail.com","firstName":"武蔵","lastName":"宮本"}
 ```
+
+
+## Crome拡張「Advanced REST client」からデータ登録
+
+ここからChrome拡張機能を追加
+
+https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo/related
+
+
+### POSTリクエスト
+
+```
+http://公開IPアドレス:1234/users/
+
+Raw Header
+-----------------------------------------------------
+Content-Type: application/json
+-----------------------------------------------------
+
+Raw payload
+-----------------------------------------------------
+{
+  "email":"kojiro-sasaki@gmail.com",
+  "firstName":"小次郎",
+  "lastName":"佐々木"
+}
+-----------------------------------------------------
+SENDをクリック
+```
+
+```bash
+mysql> select * from test.userinfo;
++----+----------------------------+------------+-----------+
+| id | email                      | first_name | last_name |
++----+----------------------------+------------+-----------+
+|  1 | musashi-miyamoto@gmail.com | 武蔵       | 宮本      |
+|  2 | kojiro-sasaki@gmail.com    | 小次郎     | 佐々木    |
++----+----------------------------+------------+-----------+
+2 rows in set (0.00 sec)
+```
+
 

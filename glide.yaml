@@ -2,3 +2,6 @@ package: echoapi
 import:
 - package: github.com/labstack/echo
   version: ~3.0.2
+- package: github.com/dgrijalva/jwt-go
+- package: github.com/go-sql-driver/mysql
+- package: github.com/gocraft/dbr
