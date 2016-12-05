@@ -207,7 +207,9 @@ $ curl http://公開IPアドレス:1234/user/1
 ## Crome拡張「Advanced REST client」からデータ登録
 
 ![Advanced REST client](https://github.com/jarrodek/ChromeRestClient/blob/develop/app/assets/arc_icon_128.png?raw=true)
+
 https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo/related
+
 ここからChrome拡張機能を追加
 
 
