@@ -7,6 +7,9 @@
 GO言語のechoフレームワークを使ってシンプルなREST APIを実装する。
 GET/POST/PUT/DELETEリクエストを受け取るとAmazonRDSに接続し、マスタテーブルを参照/追加/更新/削除する。
 
+参考にしたサイト
+http://qiita.com/keika299/items/62e806ae42828bb3567a
+
 ## 実行環境
 
 ```
