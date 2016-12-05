@@ -24,17 +24,18 @@ DBユーザー: 任意
 
 ## RDS for MySQLの設定
 
-```
 1. Webのセキュリティグループの作成
   - VPCのセキュリティグループをクリック
   - セキュリティグループの作成、ネームタグ:test-web、VPC:vpc-xxxxxxxx (defautと同じ)
   - インバウンドタブで、タイプ:カスタムTCPルール、プロトコル:TCP、ポート範囲:1234、送信元:0.0.0.0/0を指定する。
   - アウトバウンドタブで、タイプ:すべてのトラフィック、プロトコル:すべて、ポート範囲:すべて、送信元:0.0.0.0/0を指定する。
+
 2. RDS for MySQLのセキュリティグループの作成 (RDSに接続するインスタンス)
   - VPCのセキュリティグループをクリック
   - セキュリティグループの作成、ネームタグ:test-db、VPC:vpc-xxxxxxxx (defautと同じ)
   - インバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信先:RDSのセキュリティグループID: sg-xxxxxxxを指定する。
   - アウトバウンドタブで、タイプ:すべてのトラフィック、プロトコル:すべて、ポート範囲:すべて、送信元:0.0.0.0/0を指定する。
+
 3. RDSのパラメータグループを作成 (文字エンコードをlatin1からutf8にして日本語対応)
   - RDSダッシュボードのパラメータグループを選択する。
   - パラメータグループ作成をクリック。
@@ -42,11 +43,12 @@ DBユーザー: 任意
   - 「utf8」を選択し、パラメータの編集をクリック。
   - character_set_client、character_set_connection、character_set_database、character_set_results、character_set_serverを「utf8」に設定する。
   - skip-character-set-client-handshakeを「1」に設定し、変更の保存する。
+
 4. RDSのインスタンスを作成
   - RDS for MySQL 5.6.34
   - パラメータグループ: utf8
-  - DB名、ユーザー名、パスワード: 任意
-```
+  - host: MySQLドメイン、port: 3306、database: 'test'、user: 'dev'、password: 'password' (config/db.yamlに任意の値を設定)
+
 
 ## MySQLクライアントのインストール
 
