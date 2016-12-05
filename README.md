@@ -203,7 +203,7 @@ $ curl http://公開IPアドレス:1234/user/1
 
 ## Crome拡張「Advanced REST client」からデータ登録
 
-![Advanced REST client](http://www.koikikukan.com/images/2015/12/20151215_chrome_9.png)
+![Advanced REST client](https://github.com/jarrodek/ChromeRestClient/blob/develop/app/assets/arc_icon_128.png?raw=true)
 
 ここからChrome拡張機能を追加
 
