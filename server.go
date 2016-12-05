@@ -22,7 +22,7 @@ type (
 		FirstName string `db:"first_name" json:"firstName"`
 		LastName  string `db:"last_name" json:"lastName"`
 	}
-	responseData struct {
+	ResponseData struct {
 		Users []UserInfoModel `json:"users"`
 	}
 )
@@ -85,7 +85,7 @@ func selectUsers(c echo.Context) error {
 	var ua []UserInfoModel
 
 	session.Select("*").From(u.GetTable()).Load(&ua)
-	response := new(responseData)
+	response := new(ResponseData)
 	response.Users = ua
 	return c.JSON(http.StatusOK, response)
 }
