@@ -25,12 +25,16 @@ DBユーザー: 任意
 ## RDS for MySQLの設定
 
 ```
-1. RDSのセキュリティグループの作成
-  - インバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信元:EC2のセキュリティグループID: sg-xxxxxxxを指定する。
-  - アウトバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信元:EC2のセキュリティグループID: sg-xxxxxxxを指定する。
-2. ECのセキュリティグループを追加 (RDSに接続するインスタンス)
+1. Webのセキュリティグループの作成
+  - VPCのセキュリティグループをクリック
+  - セキュリティグループの作成、ネームタグ:test-web、VPC:vpc-xxxxxxxx (defautと同じ)
+  - インバウンドタブで、タイプ:カスタムTCPルール、プロトコル:TCP、ポート範囲:1234、送信元:0.0.0.0/0を指定する。
+  - アウトバウンドタブで、タイプ:すべてのトラフィック、プロトコル:すべて、ポート範囲:すべて、送信元:0.0.0.0/0を指定する。
+2. RDS for MySQLのセキュリティグループの作成 (RDSに接続するインスタンス)
+  - VPCのセキュリティグループをクリック
+  - セキュリティグループの作成、ネームタグ:test-db、VPC:vpc-xxxxxxxx (defautと同じ)
   - インバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信先:RDSのセキュリティグループID: sg-xxxxxxxを指定する。
-  - アウトバウンドタブで、タイプ:MYSQL/Aurora、プロトコル:TCP、ポート範囲:3306、送信先:RDSのセキュリティグループID: sg-xxxxxxxを指定する。
+  - アウトバウンドタブで、タイプ:すべてのトラフィック、プロトコル:すべて、ポート範囲:すべて、送信元:0.0.0.0/0を指定する。
 3. RDSのパラメータグループを作成 (文字エンコードをlatin1からutf8にして日本語対応)
   - RDSダッシュボードのパラメータグループを選択する。
   - パラメータグループ作成をクリック。
@@ -112,6 +116,15 @@ mysql> select * from test.userinfo;
 
 ## Go1.6の設定
 
+```
+$ sudo -i
+# mkdir -p /usr/local/go
+# cd /usr/local
+# wget https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
+# tar -C /usr/local -xzf go1.6.linux-amd64.tar.gz
+# chmod -R 777 /usr/local/go
+# exit
+```
 
 ```bash
 $ vi $HOME/.bash_profile
@@ -131,6 +144,8 @@ $ source $HOME/.bash_profile
 ```bash
 $ go version
 go version go1.6 linux/amd64
+
+$ go get golang.org/x/tools/cmd/goimports
 ```
 
 ```bash
