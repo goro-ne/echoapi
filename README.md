@@ -4,8 +4,8 @@
 
 ## 目的
 
-GO言語のechoフレームワークを遣い、シンプルなREST APIを実装する。
-リクエストを受けると、AmazonRDSに接続して結果をJSONで返す。
+GO言語のechoフレームワークを使ってシンプルなREST APIを実装する。
+GET/POST/PUT/DELETEリクエストを受け取るとAmazonRDSに接続し、マスタテーブルを参照/追加/更新/削除する。
 
 ## 実行環境
 
