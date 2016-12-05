@@ -24,6 +24,8 @@ DBユーザー: 任意
 
 ## RDS for MySQLの設定
 
+![RDS for MySQL](https://cdn2.iconfinder.com/data/icons/amazon-aws-stencils/100/Database_copy_Amazon_RDS_MySQL_DB_Instance-128.png)
+
 1. Webのセキュリティグループの作成
   - VPCのセキュリティグループをクリック
   - セキュリティグループの作成、ネームタグ:test-web、VPC:vpc-xxxxxxxx (defautと同じ)
@@ -200,6 +202,8 @@ $ curl http://公開IPアドレス:1234/user/1
 
 
 ## Crome拡張「Advanced REST client」からデータ登録
+
+![Advanced REST client](http://www.koikikukan.com/images/2015/12/20151215_chrome_9.png)
 
 ここからChrome拡張機能を追加
 
