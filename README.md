@@ -50,6 +50,7 @@ DBユーザー: 任意
   - 「utf8」を選択し、パラメータの編集をクリック。
   - character_set_client、character_set_connection、character_set_database、character_set_results、character_set_serverを「utf8」に設定する。
   - skip-character-set-client-handshakeを「1」に設定し、変更の保存する。
+  - time_zoneを「Asia/Tokyo」に変更する。
 ```
 ```
 4. RDSのインスタンスを作成
