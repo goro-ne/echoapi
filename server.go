@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-yaml/yaml"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"gopkg.in/yaml.v2"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gocraft/dbr"
