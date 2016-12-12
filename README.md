@@ -125,14 +125,14 @@ mysql> select * from test.userinfo;
 ```
 
 
-## Go1.6の設定
+## Go1.7.4の設定
 
 ```
 $ sudo -i
 # mkdir -p /usr/local/go
 # cd /usr/local
-# wget https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
-# tar -C /usr/local -xzf go1.6.linux-amd64.tar.gz
+# wget https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
+# tar -C /usr/local -xzf go1.7.4.linux-amd64.tar.gz
 # chmod -R 777 /usr/local/go
 # exit
 ```
@@ -141,7 +141,7 @@ $ sudo -i
 $ vi $HOME/.bash_profile
 --------------------------------------------------
      :     追記
-export GOVERSION=1.6
+export GOVERSION=1.7.4
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go/$GOVERSION
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
@@ -154,9 +154,9 @@ $ source $HOME/.bash_profile
 
 ```bash
 $ go version
-go version go1.6 linux/amd64
+go version go1.7.4 linux/amd64
 
-$ go get golang.org/x/tools/cmd/goimports
+$ go get -u github.com/bradfitz/goimports
 ```
 
 ```bash
